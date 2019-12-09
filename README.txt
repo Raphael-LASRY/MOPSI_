@@ -1,0 +1,9 @@
+- Ouvrir le panneau de configuration
+- Aller dans systeme et sécurité
+- Aller dans système
+- Aller dans Paramètre système avancés (à gauche)
+- Variables d'environnement
+- Variables système (en bas), trouver Path
+- Modifier
+- Nouveau
+- Copier coller le chemin d'acces où est le dossier glpk-4.65
