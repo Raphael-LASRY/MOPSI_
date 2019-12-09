@@ -3,13 +3,13 @@
 set Name_Users;
 param Debt{Name_Users}; /* Montants avancés par chaque personne */
 
-table tab_Amount IN "CSV" "C:/Users/pc/Desktop/Enpc/2A/MOPSI/MOPSI/MOPSI/Dettes.csv" : 
+table tab_Amount IN "CSV" "Dettes.csv" : 
   Name_Users <- [NAME], Debt ~ VALUE;
 param Sum_Amount := sum{k in Name_Users}(abs(Debt[k]));
 
 set Nb_Exchanges;
 param Nb_{Nb_Exchanges};
-table tab_Exchange IN "CSV" "C:/Users/pc/Desktop/Enpc/2A/MOPSI/MOPSI/MOPSI/Exchanges.csv":
+table tab_Exchange IN "CSV" "Exchanges.csv":
   Nb_Exchanges <- [EXCHANGES], Nb_ ~ NUMBER;
 /* Introduction des paramètres et des variables */
 
@@ -27,6 +27,6 @@ solve;
 
 /* Visualisation des résultats */
 
-printf {i in Name_Users, j in Name_Users: Flow[i, j]!=0} "%s doit %g à %s \n", j, Flow[i, j], i >> "C:/Users/pc/Desktop/Enpc/2A/MOPSI/MOPSI/MOPSI/Results.csv"; /* On affiche uniquement les transactions non nulles entre personnes */
+printf {i in Name_Users, j in Name_Users: Flow[i, j]!=0} "%s doit %g à %s \n", j, Flow[i, j], i >> "Results.csv"; /* On affiche uniquement les transactions non nulles entre personnes */
 
 end;

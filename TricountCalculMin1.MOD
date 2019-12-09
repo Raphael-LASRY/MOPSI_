@@ -3,7 +3,7 @@
 set Name_Users;
 param Debt{Name_Users}; /* Montants avancés par chaque personne */
 
-table tab_Amount IN "CSV" "C:/Users/pc/Desktop/Enpc/2A/MOPSI/MOPSI/MOPSI/Dettes.csv" : 
+table tab_Amount IN "CSV" "Dettes.csv" : 
   Name_Users <- [NAME], Debt ~ VALUE;
 param Sum_Amount := sum{k in Name_Users}(abs(Debt[k]));
 
@@ -23,7 +23,7 @@ solve;
 
 /* Visualisation des résultats */
 
-printf "EXCHANGES,NUMBER\n" >> "C:/Users/pc/Desktop/Enpc/2A/MOPSI/MOPSI/MOPSI/Exchanges.csv";
-printf "Number,%d\n",Nb_exchanges >> "C:/Users/pc/Desktop/Enpc/2A/MOPSI/MOPSI/MOPSI/Exchanges.csv";
+printf "EXCHANGES,NUMBER\n" >> "Exchanges.csv";
+printf "Number,%d\n",Nb_exchanges >> "Exchanges.csv";
 
 end;
