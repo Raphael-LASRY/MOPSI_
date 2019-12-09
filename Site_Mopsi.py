@@ -34,5 +34,7 @@ if (os.path.exists("Results.csv")):
 if (os.path.exists("Exchanges.csv")):
     os.remove("Exchanges.csv")
     
-os.system("glpsol -m TricountCalculMin1.MOD")
-os.system("glpsol -m TricountCalculFlow1.MOD")
+#os.system("glpsol -m TricountCalculMin1.MOD")
+#os.system("glpsol -m TricountCalculFlow1.MOD")
+os.system("glpsol -m TricountCalculMinInteger.MOD")
+os.system("glpsol -m TricountCalculFlowInteger.MOD")
