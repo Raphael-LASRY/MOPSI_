@@ -26,3 +26,8 @@ OU
 	le flow min
 
 - Dans results.csv et exchanges.csv sont écrits les résultats.
+
+
+FICHIERS INTEGER : 
+le but est de renvoyer des échanges entiers qui minimisent le max 
+des pertes dues aux arrondis
