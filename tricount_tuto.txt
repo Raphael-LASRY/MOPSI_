@@ -27,7 +27,21 @@ OU
 
 - Dans results.csv et exchanges.csv sont écrits les résultats.
 
-
+#############################################################################
 FICHIERS INTEGER : 
 le but est de renvoyer des échanges entiers qui minimisent le max 
 des pertes dues aux arrondis
+
+- Results_integer.csv : mêmes infos que Results mais sous forme condensée pour
+faciliter la lecture de fichier
+
+- TricountCalculFlowInteger.MOD : meme fichier que Flow1 mais résultats
+sont notés dans results_integer.csv (sous forme condensée donc)
+
+- Dettes_fourchettes : fichier de la forme : 
+[ ["Patrick", sa dette si il se fait douiller à chaque arrondi, 
+sa dette si il douille tout le monde à chaque arrondi], ["Gérard", ...] ... ]
+
+- test_integer.py : le fichier .py sur la meme base que le fichier 
+site.mopsi mais avec les modifs à la fin pour créer les 2 fichiers
+mentionnés ci-dessus

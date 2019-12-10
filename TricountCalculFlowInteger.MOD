@@ -27,7 +27,7 @@ solve;
 
 /* Visualisation des résultats */
 
-printf {i in Name_Users, j in Name_Users: Flow[i, j]!=0} "%s doit %g à %s \n", j, Flow[i, j], i >> "Results.csv"; /* On affiche uniquement les transactions non nulles entre personnes */
+printf {i in Name_Users, j in Name_Users: Flow[i, j]!=0} "%s,%g,%s \n", j, Flow[i, j], i >> "Results_integer.csv"; /* On affiche uniquement les transactions non nulles entre personnes */
 
 end;
 
