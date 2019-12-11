@@ -44,35 +44,56 @@ r.close()
 
 
 
-#Calcul exact solutions
+# Calcul exact solutions
 os.system("glpsol -m TricountCalculMin1.MOD")
 os.system("glpsol -m TricountCalculFlowInteger.MOD")
+# 
+# 
+# Dettes = [ [name,0,0] for name in Names] # Le premier 0 = la fourchette qui l'arrange pas, le 2e = la fourchette qui l'arrange
+# r = open("Results_integer.csv", "r")
+# test = csv.reader(r)
+# 
+# for row in test:
+#     for perso in Dettes:
+#         if perso[0] == row[0]:
+#             perso[1] += int(float(row[1][:]))
+#             perso[2] += int(float(row[1][:])) + 1
+#         elif perso[0] == row[2]:
+#             perso[1] += -int(float(row[1][:])) -1
+#             perso[2] += -int(float(row[1][:]))
+#             
+# print("###########################################")
+# print(Dettes)
+# print("###########################################")
+# 
+# Dettesdf = pd.DataFrame(Dettes)
+# if (os.path.exists("Dettes_fourchettes.csv")):
+#     os.remove("Dettes_fourchettes.csv")
+# Dettesdf.to_csv("Dettes_fourchettes.csv", index=False, header=False, sep=",")
+# r.close()
 
 
-Dettes = [ [name,0,0] for name in Names] #le premier 0 = la fourchette qui l'arrange pas, le 2e = la fourchette qui l'arrange
+
+
+Echanges = [["NAMEPAY","SUMHIGH","SUMLOW","NAMEPAYED"]]
 r = open("Results_integer.csv", "r")
-test = csv.reader(r)
+results = csv.reader(r)
 
-for row in test:
-    for perso in Dettes:
-        if perso[0] == row[0]:
-            perso[1] += int(float(row[1][:]))
-            perso[2] += int(float(row[1][:])) + 1
-        elif perso[0] == row[2]:
-            perso[1] += -int(float(row[1][:])) -1
-            perso[2] += -int(float(row[1][:]))
+for row in results:
+    if row[0] != "NAMEPAY":
+        Echanges.append([row[0],int(float(row[1][:])), int(float(row[1][:])) + 1, row[2]])
             
 print("###########################################")
-print(Dettes)
+print(Echanges)
 print("###########################################")
 
-Dettesdf = pd.DataFrame(Dettes)
-if (os.path.exists("Dettes_fourchettes.csv")):
-    os.remove("Dettes_fourchettes.csv")
-Dettesdf.to_csv("Dettes_fourchettes.csv", index=False, header=False, sep=",")
+Echangesdf = pd.DataFrame(Echanges)
+if (os.path.exists("Results_fourchettes.csv")):
+    os.remove("Results_fourchettes.csv")
+Echangesdf.to_csv("Results_fourchettes.csv", index=False, header=False, sep=",")
 r.close()
 
-res = pd.read_csv("Results_integer.csv", index_col = None, sep=",")
+res = pd.read_csv("Results_fourchettes.csv", index_col = None, sep=",")
 
 
 
