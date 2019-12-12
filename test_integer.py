@@ -75,13 +75,13 @@ os.system("glpsol -m TricountCalculFlowInteger.MOD")
 
 
 
-Echanges = [["NAMEPAY","SUMHIGH","SUMLOW","NAMEPAYED"]]
+Echanges = [["NAMEPAY","SUMREAL","SUMHIGH","SUMLOW","NAMEPAYED"]]
 r = open("Results_integer.csv", "r")
 results = csv.reader(r)
 
 for row in results:
     if row[0] != "NAMEPAY":
-        Echanges.append([row[0],int(float(row[1][:])), int(float(row[1][:])) + 1, row[2]])
+        Echanges.append([row[0],float(row[1][:]),int(float(row[1][:])), int(float(row[1][:])) + 1, row[2]])
             
 print("###########################################")
 print(Echanges)
