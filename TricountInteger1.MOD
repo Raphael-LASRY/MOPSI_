@@ -1,30 +1,34 @@
 /* Données connues du problème auxquelles on fait référence dans la partie Data */
 
-set Name;
-param Sum_High{Name}; /* Montants hauts pour chaque personne */
-param Sum_Low{Name}; /* Montants bas pour chaque personne */
+set Name_User;
+set Index_Operation dimen 2;
+param Sum_High{Index_Operation}; /* Montants hauts pour chaque personne */
+param Sum_Low{Index_Operation}; /* Montants bas pour chaque personne */
+param Sum_Real{Index_Operation}; /* Montants réels pour chaque personne */
 
-table tab_Entier IN "CSV" "Results_integer.csv" : 
-  Name <- [NAMEPAY], Sum_High ~ SUMHIGH, Sum_Low ~ SUMLOW, Sum_Real ~ SUMREAL;
+table noms IN "CSV" "Dettes.csv" :
+  Name_User <- [NAME];
+table tab_Entier IN "CSV" "Results_fourchettes.csv" : 
+  Index_Operation <- [NAMEPAY,NAMEPAYED], Sum_High ~ SUMHIGH, Sum_Low ~ SUMLOW, Sum_Real ~ SUMREAL;
 
 /* Introduction des paramètres et des variables */
 
-var Flow{Name} >= 0;  /* Matrice indiquant combien l'individu i doit à l'individu j */
-var Ecart {Name}; /* Ecart pour chaque personne */
+var Flow{Index_Operation} >= 0 integer;  /* Matrice indiquant combien l'individu i doit à l'individu j en nombre entier */
+var Ecart {Name_User}; /* Ecart pour chaque personne */
 
 /* Corps du problème d'optimisation */
 
-minimize Nombre_ecart {i in Name} : Ecart[i]; /* Minimisation du nombre de transactions */
+minimize Nombre_ecart {i in Name_User} : Ecart[i]; /* Minimisation du nombre de transactions */
 
-s.t. High{k in Name} : Flow[k] >= Sum_Low[m]; /* La transaction est supérieure à la fouchette basse */
-s.t. Low{m in Name} : Flow[m] <= Sum_High[m]; /* La transaction est inférieure à la fouchette haute */
-s.t. Abs1 {l in Name} Ecart[l] >= sum{t in Operation : Name_Operation = l} (Flow[t] - Sum_Real[t]); /* Les ecarts sont les valeurs absolues */
-s.t. Abs2 {p in Name} Ecart[p] >= sum{v in Operation : Name_Operation = p} (Flow[v] - Sum_Real[v]); /* Les ecarts sont les valeurs absolues */
+s.t. High{(k, l) in Index_Operation} : Flow[k, l] >= Sum_Low[k, l]; /* La transaction est supérieure à la fouchette basse */
+s.t. Low{(m, n) in Index_Operation} : Flow[m, n] <= Sum_High[m, n]; /* La transaction est inférieure à la fouchette haute */
+s.t. Abs1 {t in Name_User} : Ecart[t] >= sum{(u, v) in Index_Operation : u == t or v == t} (Flow[u, v] - Sum_Real[u, v]); /* Les ecarts sont les valeurs absolues */
+s.t. Abs2 {p in Name_User} : Ecart[p] >= sum{(x, y) in Index_Operation : x == p or y == p} (Sum_Real[x, y] - Flow[x, y]); /* Les ecarts sont les valeurs absolues */
 
 solve;
 
 /* Visualisation des résultats */
 
-printf {j in Name} "%s va effectivement payer %g \n", j, Flow[j] >> "Results_integer.csv" /* On affiche ce que les gens ont effectivement payé */
+printf {(b, g) in Index_Operation} "%s va effectivement payer %g à %s\n", b, Flow[b, g], g >> "Results_integer.csv"; /* On affiche ce que les gens ont effectivement payé */
 
 end;
