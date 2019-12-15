@@ -29,6 +29,10 @@ solve;
 
 /* Visualisation des résultats */
 
-printf {(b, g) in Index_Operation} "%s va effectivement payer %g à %s\n", b, Flow[b, g], g >> "Results_integer.csv"; /* On affiche ce que les gens ont effectivement payé */
-
+printf "\n" >> "Results_integer.csv";
+printf {(b, g) in Index_Operation} "%s va effectivement payer %g a %s\n", b, Flow[b, g], g >> "Results_integer.csv"; /* On affiche ce que les gens ont effectivement payé */
+printf "\n" >> "Results_integer.csv";
+printf {h in Name_User} "L'ecart total pour l'utilisateur %s est de %g\n", h, Nombre_ecart[h] >> "Results_integer.csv";
+printf "\n" >> "Results_integer.csv";
+printf "La somme des ecarts est de %g", sum{r in Name_User} Nombre_ecart[r] >> "Results_integer.csv";
 end;

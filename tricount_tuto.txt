@@ -1,4 +1,4 @@
-Fichier Site_MOPSI.py qui commande tout.
+Fichier Site_MOPSI.py fichier principal.
 
 - Dans Operations.csv on rentre de base (à la main pour l'instant!) 
 les données, càd les dépenses de chacun (1 ligne = 1 achat). 
@@ -7,29 +7,31 @@ que ensuite tout ça se remplisse seul par un calcul simple en
 rentrant simplement la somme, l'acheteur, et les concernés par l'achat.
 Attention! Achat de 15 devient [0,10,-5,-5,0] par ex
 
-- ensuite supprime le fichier dettes.csv si déjà créé
+- Ensuite supprime le fichier dettes.csv si déjà créé
 
-- ensuite ça crée le fichier dettes.csv avec les bonnes dettes (positif
+- Ensuite ça crée le fichier dettes.csv avec les bonnes dettes (positif
 si on lui doit de l'argent, négatif sinon)
 
-- on supprime results.csv et exchanges.csv si existent car le GLPK va 
+- On supprime results.csv et exchanges.csv si existent car le GLPK va 
 les créer
 
 - Ensuite 2 options : 
 	- TricountCalculMin1.MOD calcule le nbre minimal 
 	d'échanges à faire
-	- puis TricountCalculFlow1.MOD calcule ne nbre min de flow sachant
+	- TricountCalculFlow1.MOD calcule ne nbre min de flow sachant
 	le nbre d'échanges
 OU 
 	- TricountCalculFlow2.MOD calcule le flow min
-	- puis TricountCalculMin2.MOD calcule ne nbre min d'échanges sachant
+	- TricountCalculMin2.MOD calcule ne nbre min d'échanges sachant
 	le flow min
 
-- Dans results.csv et exchanges.csv sont écrits les résultats.
+- Dans results.csv et exchanges.csv sont écrits les résultats. (Si on choisit l'option n°1)
+- Dans flow.csv et exchanges2.csv sont écrits les résultats. (Si on choisit l'option n°2)
 
 #############################################################################
 FICHIERS INTEGER : 
-le but est de renvoyer des échanges entiers qui minimisent le max 
+
+Le but est de renvoyer des échanges entiers qui minimisent le max 
 des pertes dues aux arrondis
 
 - Results_integer.csv : mêmes infos que Results mais sous forme condensée pour

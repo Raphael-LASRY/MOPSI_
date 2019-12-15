@@ -75,17 +75,17 @@ os.system("glpsol -m TricountCalculFlowInteger.MOD")
 
 
 
-Echanges = [["NAMEPAY","SUMREAL","SUMHIGH","SUMLOW","NAMEPAYED"]]
+Echanges = [["NAMEPAY","NAMEPAYED","SUMREAL","SUMLOW","SUMHIGH"]]
 r = open("Results_integer.csv", "r")
 results = csv.reader(r)
 
 for row in results:
     if row[0] != "NAMEPAY":
-        Echanges.append([row[0],float(row[1][:]),int(float(row[1][:])), int(float(row[1][:])) + 1, row[2]])
+        Echanges.append([row[0],row[2],float(row[1][:]),int(float(row[1][:])),int(float(row[1][:]))+1])
             
-print("###########################################")
-print(Echanges)
-print("###########################################")
+# print("###########################################")
+# print(Echanges)
+# print("###########################################")
 
 Echangesdf = pd.DataFrame(Echanges)
 if (os.path.exists("Results_fourchettes.csv")):
@@ -94,6 +94,8 @@ Echangesdf.to_csv("Results_fourchettes.csv", index=False, header=False, sep=",")
 r.close()
 
 res = pd.read_csv("Results_fourchettes.csv", index_col = None, sep=",")
+
+os.system("glpsol -m TricountInteger1.MOD")
 
 
 

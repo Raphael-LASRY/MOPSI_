@@ -21,7 +21,7 @@ op = pd.read_csv("Operations.csv", index_col = None, sep=",")
 L=[["NAME","VALUE"]]
 for name in Names:
     L.append([name,sum(op[name])])
-print(L)
+# print(L)
    
     
 Ldf = pd.DataFrame(L)
@@ -33,8 +33,14 @@ if (os.path.exists("Results.csv")):
     os.remove("Results.csv")
 if (os.path.exists("Exchanges.csv")):
     os.remove("Exchanges.csv")
+if (os.path.exists("Flow.csv")):
+    os.remove("Flow.csv")
+if (os.path.exists("Exchanges2.csv")):
+    os.remove("Exchanges2.csv")
     
 #os.system("glpsol -m TricountCalculMin1.MOD")
 #os.system("glpsol -m TricountCalculFlow1.MOD")
-os.system("glpsol -m TricountCalculMinInteger.MOD")
-os.system("glpsol -m TricountCalculFlowInteger.MOD")
+os.system("glpsol -m TricountCalculFlow2.MOD")
+os.system("glpsol -m TricountCalculMin2.MOD")
+# os.system("glpsol -m TricountCalculMinInteger.MOD")
+# os.system("glpsol -m TricountCalculFlowInteger.MOD")

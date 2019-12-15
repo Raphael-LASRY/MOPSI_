@@ -23,6 +23,6 @@ solve;
 /* Visualisation des résultats */
 
 printf "FLOW,NUMBER\n" >> "Flow.csv";
-printf "Number,%g\n",Cash_exchanges >> "Flow.csv";
+printf "Number,%f\n",Cash_exchanges >> "Flow.csv";
 
 end;

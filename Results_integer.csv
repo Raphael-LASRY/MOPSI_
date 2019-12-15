@@ -1,5 +1,27 @@
 NAMEPAY,SUM,NAMEPAYED 
-Name2,5.1,Name1 
-Name4,11.3,Name1 
-Name4,3,Name3 
-Name5,14.3,Name3 
+Name2,0.51,Name1
+Name3,0.51,Name1
+Name4,0.49,Name1
+Name5,0.49,Name1
+Name6,0.5,Name1
+Name7,0.5,Name1
+Name8,0.07,Name1
+
+Name2 va effectivement payer 1 a Name1
+Name3 va effectivement payer 0 a Name1
+Name4 va effectivement payer 0 a Name1
+Name5 va effectivement payer 0 a Name1
+Name6 va effectivement payer 1 a Name1
+Name7 va effectivement payer 1 a Name1
+Name8 va effectivement payer 0 a Name1
+
+L'ecart total pour l'utilisateur Name1 est de 0.07
+L'ecart total pour l'utilisateur Name2 est de 0.49
+L'ecart total pour l'utilisateur Name3 est de 0.51
+L'ecart total pour l'utilisateur Name4 est de 0.49
+L'ecart total pour l'utilisateur Name5 est de 0.49
+L'ecart total pour l'utilisateur Name6 est de 0.5
+L'ecart total pour l'utilisateur Name7 est de 0.5
+L'ecart total pour l'utilisateur Name8 est de 0.07
+
+La somme des ecarts est de 3.12

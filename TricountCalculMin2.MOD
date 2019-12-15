@@ -23,7 +23,7 @@ minimize Nb_exchanges : sum{i in Name_Users, j in Name_Users}(Exchanges[i, j]); 
 
 s.t. Transaction{k in Name_Users, l in Name_Users} : Exchanges[k, l] >= Flow[k, l]/ (1 + Sum_Amount); /* Il y a transaction si le flow entre i et j est posistif */
 s.t. Equilibrium{m in Name_Users} : Debt[m] = sum{n in Name_Users}(Flow[m, n] - Flow[n, m]); /* L'équilibre budgetaire doit etre respecté */
-s.t. Cash_exchanges{t in Nb_cash_exchange} : sum{i in Name_Users, j in Name_Users}(Flow[i, j]) <= (1.00001)*Nb_[t]; /* La somme des echanges est imposée */
+s.t. Cash_exchanges{t in Nb_cash_exchange} : sum{i in Name_Users, j in Name_Users}(Flow[i, j]) = Nb_[t]; /* La somme des echanges est imposée */
 
 solve;
 
