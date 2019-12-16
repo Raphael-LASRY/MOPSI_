@@ -30,9 +30,18 @@ if (os.path.exists("Dettes.csv")):
     os.remove("Dettes.csv")
 Ldf.to_csv("Dettes.csv", index=False, header=False, sep=",")
 
-compteur = 0
+compteur_nb_flow = 0
+compteur_nb_trans = 0
+def read_csv(commande: str):
+    r1 = open(commande, "r", newline='')
+    a = csv.reader(r1)
+    A = []
+    for row in a:
+        A.append(row)
+    r1.close()
+    return A
     
-for i in range(5):
+for i in range(1):
     if (os.path.exists("Results.csv")):
         os.remove("Results.csv")
     if (os.path.exists("Exchanges.csv")):
@@ -46,22 +55,16 @@ for i in range(5):
     os.system("glpsol -m TricountCalculFlow1.MOD")
     os.system("glpsol -m TricountCalculFlow2.MOD")
     os.system("glpsol -m TricountCalculMin2.MOD")
-    r1 = open("Exchanges.csv", "r", newline='')
-    a = csv.reader(r1)
-    A = []
-    for row in a:
-        A.append(row)
-    r2 = open("Exchanges2.csv", "r", newline='')
-    b = csv.reader(r2)
-    B = []
-    for row in b:
-        B.append(row)
+    A = read_csv("Exchanges.csv")
+    B = read_csv("Exchanges2.csv")
     if (A[-1]!=B[-1]):
-        compteur += 1
-    r1.close()
-    r2.close()
-if (compteur != 0):
-    print ("Sur {} calculs il y a eu un écart".format(compteur))
+        compteur_nb_trans += 1
+    C = read_csv("Results.csv")
+    D = read_csv("Flow.csv")
+    if (C[-1][1]!=D[-1][1]):
+        compteur_nb_flow += 1
+if (compteur_nb_trans != 0 or compteur_nb_flow != 0):
+    print ("Il y a eu {} écarts en nombre de transactions et {} en flow".format(compteur_nb_trans,compteur_nb_flow))
 else:
     print("Les deux méthodes donnent le même nombre de transactions")
 # os.system("glpsol -m TricountCalculMinInteger.MOD")
