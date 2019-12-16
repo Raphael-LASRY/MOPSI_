@@ -16,10 +16,8 @@ r.write("\n")
 for i in range(Nombre_operations):
     for j in range(Nombre_utilisateurs-1):
         Matrice_operations[i, j] = 20*rd.random() # On paie entre 0 et 20€
-print(Matrice_operations)
 for i in range(Nombre_operations):
     Matrice_operations[i] -= np.mean(Matrice_operations[i, :])
-print(Matrice_operations)
 
 delta=np.zeros(Nombre_operations)
 for i in range(Nombre_operations):
