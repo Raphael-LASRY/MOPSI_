@@ -1,76 +1,76 @@
+##################################### 
+
+''' 
+Projet MOPSI 2019-2020 Maxime BRISINGER et Raphael LASRY  
+Ce fichier a pour but de préparer les csv pour réaliser des transactions entières
+'''
+
+##################################### Bibliothèques utiles
+
 import pandas as pd
 import os 
 import csv
+import numpy as np
 
-op = pd.read_csv("Operations.csv", header = None, index_col = None, sep=",")
+##################################### Remplissage du fichier Dettes.csv à partir du fichier Operations.csv
 
-test = True
-Noms_utilisateurs = 0
-Names = []
-while test:
-    try:
-        op[Noms_utilisateurs][0]
-    except:
-        test = False
-    Noms_utilisateurs += 1
-Noms_utilisateurs -= 1
-for nom in range (1,Noms_utilisateurs):
-    Names.append(op[nom][0])
+def completer_dettes():
+    op = pd.read_csv("Operations.csv",header = None, index_col = None, sep=",")
+    Names = list(np.transpose(op)[0])
+    op = pd.read_csv("Operations.csv", index_col = None, sep=",")
+    del(Names[0])
+    L=[["NAME","VALUE"]]
+    for name in Names:
+        L.append([name,sum(op[name])]) # On impose ici que les opérations soient telles que la somme des dépenses sur toutes les personnes soit nulle
+    Ldf = pd.DataFrame(L)
+    if (os.path.exists("Dettes.csv")):
+        os.remove("Dettes.csv")
+    Ldf.to_csv("Dettes.csv", index=False, header=False, sep=",")
+    return (Names)
+Names = completer_dettes()
 
-op = pd.read_csv("Operations.csv", index_col = None, sep=",")
-
-L=[["NAME","VALUE"]]
-for name in Names:
-    L.append([name,sum(op[name])])
-print(L)
-
-    
-Ldf = pd.DataFrame(L)
-if (os.path.exists("Dettes.csv")):
-    os.remove("Dettes.csv")
-Ldf.to_csv("Dettes.csv", index=False, header=False, sep=",")
+##################################### Création des fichier Results_integer.csv, Results_fourchettes.csv et Dettes_fourchettes.csv
 
 if (os.path.exists("Results.csv")):
     os.remove("Results.csv")
 if (os.path.exists("Exchanges.csv")):
     os.remove("Exchanges.csv")
-
-#Integer
 if (os.path.exists("Results_integer.csv")):
     os.remove("Results_integer.csv")
+
 r = open("Results_integer.csv", "a")
 r.write("NAMEPAY,SUM,NAMEPAYED \n")
 r.close()
 
-
-
 # Calcul exact solutions
+
 os.system("glpsol -m TricountCalculMin1.MOD")
 os.system("glpsol -m TricountCalculFlowInteger.MOD")
-# 
-# 
-# Dettes = [ [name,0,0] for name in Names] # Le premier 0 = la fourchette qui l'arrange pas, le 2e = la fourchette qui l'arrange
-# r = open("Results_integer.csv", "r")
-# test = csv.reader(r)
-# 
-# for row in test:
-#     for perso in Dettes:
-#         if perso[0] == row[0]:
-#             perso[1] += int(float(row[1][:]))
-#             perso[2] += int(float(row[1][:])) + 1
-#         elif perso[0] == row[2]:
-#             perso[1] += -int(float(row[1][:])) -1
-#             perso[2] += -int(float(row[1][:]))
-#             
+
+# Création des fourchettes hautes et basses
+
+Dettes = [[name,0,0] for name in Names] # Le deuxième argument représente la fourchette basse, le premier la fourchette haute
+r = open("Results_integer.csv", "r")
+Rows = csv.reader(r)
+
+for row in Rows:
+    for perso in Dettes:
+        if perso[0] == row[0]:
+            perso[1] += int(float(row[1][:]))
+            perso[2] += int(float(row[1][:])) + 1
+        elif perso[0] == row[2]:
+            perso[1] += -int(float(row[1][:])) -1
+            perso[2] += -int(float(row[1][:]))
+            
 # print("###########################################")
 # print(Dettes)
 # print("###########################################")
-# 
-# Dettesdf = pd.DataFrame(Dettes)
-# if (os.path.exists("Dettes_fourchettes.csv")):
-#     os.remove("Dettes_fourchettes.csv")
-# Dettesdf.to_csv("Dettes_fourchettes.csv", index=False, header=False, sep=",")
-# r.close()
+
+Dettesdf = pd.DataFrame(Dettes)
+if (os.path.exists("Dettes_fourchettes.csv")):
+    os.remove("Dettes_fourchettes.csv")
+Dettesdf.to_csv("Dettes_fourchettes.csv", index=False, header=False, sep=",")
+r.close()
 
 
 

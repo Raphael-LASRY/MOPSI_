@@ -1,4 +1,4 @@
-/* Données connues du problème auxquelles on fait référence dans la partie Data */
+/* Introduction des tables et des paramètres */
 
 set Name_Users;
 param Debt{Name_Users}; /* Montants avancés par chaque personne */
@@ -7,7 +7,7 @@ table tab_Amount IN "CSV" "Dettes.csv" :
   Name_Users <- [NAME], Debt ~ VALUE;
 param Sum_Amount := sum{k in Name_Users}(abs(Debt[k]));
 
-/* Introduction des paramètres et des variables */
+/* Introduction  des variables */
 
 var Exchanges{Name_Users, Name_Users}, binary; /* Matrice indiquant s'il y a eu un échange entre l'individu i et j */
 var Flow{Name_Users, Name_Users} >= 0;  /* Matrice indiquant combien l'individu i doit à l'individu j */
