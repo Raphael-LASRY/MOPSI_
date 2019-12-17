@@ -2,33 +2,34 @@ import pandas as pd
 import os 
 import csv
 
-op = pd.read_csv("Operations.csv", header = None, index_col = None, sep=",")
-
-test = True
-Noms_utilisateurs = 0
-Names = []
-while test:
-    try:
-        op[Noms_utilisateurs][0]
-    except:
-        test = False
-    Noms_utilisateurs += 1
-Noms_utilisateurs -= 1
-for nom in range (1,Noms_utilisateurs):
-    Names.append(op[nom][0])
-
-op = pd.read_csv("Operations.csv", index_col = None, sep=",")
-
-L=[["NAME","VALUE"]]
-for name in Names:
-    L.append([name,sum(op[name])])
-# print(L)
-   
+def completer_dettes():
+    op = pd.read_csv("Operations.csv", header = None, index_col = None, sep=",")
     
-Ldf = pd.DataFrame(L)
-if (os.path.exists("Dettes.csv")):
-    os.remove("Dettes.csv")
-Ldf.to_csv("Dettes.csv", index=False, header=False, sep=",")
+    test = True
+    Noms_utilisateurs = 0
+    Names = []
+    while test:
+        try:
+            op[Noms_utilisateurs][0]
+        except:
+            test = False
+        Noms_utilisateurs += 1
+    Noms_utilisateurs -= 1
+    for nom in range (1,Noms_utilisateurs):
+        Names.append(op[nom][0])
+    
+    op = pd.read_csv("Operations.csv", index_col = None, sep=",")
+    
+    L=[["NAME","VALUE"]]
+    for name in Names:
+        L.append([name,sum(op[name])])
+    # print(L)
+    
+        
+    Ldf = pd.DataFrame(L)
+    if (os.path.exists("Dettes.csv")):
+        os.remove("Dettes.csv")
+    Ldf.to_csv("Dettes.csv", index=False, header=False, sep=",")
 
 compteur_nb_flow = 0
 compteur_nb_trans = 0
@@ -41,7 +42,7 @@ def read_csv(commande: str):
     r1.close()
     return A
     
-for i in range(1):
+for i in range(5):
     if (os.path.exists("Results.csv")):
         os.remove("Results.csv")
     if (os.path.exists("Exchanges.csv")):
@@ -50,6 +51,7 @@ for i in range(1):
         os.remove("Flow.csv")
     if (os.path.exists("Exchanges2.csv")):
         os.remove("Exchanges2.csv")
+    completer_dettes()
     os.system("python Generation_aleatoire_csv.py")    
     os.system("glpsol -m TricountCalculMin1.MOD")
     os.system("glpsol -m TricountCalculFlow1.MOD")
