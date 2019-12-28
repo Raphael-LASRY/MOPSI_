@@ -11,50 +11,59 @@ Fichier conforme à la norme PEP8
 
 ########### Bibliothèques utiles
 
-import pandas as pd
 import os
+
+# Gestion des données avec un csv
+
 import csv
+import pandas as pd
+
+# Gestion des matrices
+
 import numpy as np
 
 ########### Remplissage du fichier Dettes.csv à partir du fichier Operations.csv
 
-
 def completer_dettes():
-    
-    op = pd.read_csv("Operations.csv", header=None, index_col=None, sep=",")
-    Names = list(np.transpose(op)[0])
-    op = pd.read_csv("Operations.csv", index_col=None, sep=",")
-    del Names[0]
-    L = [["NAME", "VALUE"]]
-    for name in Names:
-        L.append(
-            [name, sum(op[name])]
+    """
+    Permet de passer des opérations effectuées à un fichier de dettes.
+    """
+    operations = pd.read_csv("Operations.csv", header=None, index_col=None, sep=",")
+    names = list(np.transpose(operations)[0])
+    operations = pd.read_csv("Operations.csv", index_col=None, sep=",")
+    del names[0]
+    liste_names = [["NAME", "VALUE"]]
+    for name in names:
+        liste_names.append(
+            [name, sum(operations[name])]
         )  # On impose ici que les opérations soient telles que la somme des
         # Dépenses sur toutes les personnes soit nulle
-    Ldf = pd.DataFrame(L)
+    liste_names_df = pd.DataFrame(liste_names)
     if os.path.exists("Dettes.csv"):
         os.remove("Dettes.csv")
-    Ldf.to_csv("Dettes.csv", index=False, header=False, sep=",")
-
+    liste_names_df.to_csv("Dettes.csv", index=False, header=False, sep=",")
 
 ########### Génération aléatoire de csv et comparaison des deux approches
 
-compteur_ecart_flow = 0
-compteur_ecart_trans = 0
-Nombre_iterations = 5
+COMPTEUR_ECART_FLOW = 0
+COMPTEUR_ECART_TRANS = 0
+NOMBRE_ITERATIONS = 5
 
 
-def read_csv(commande: str):  # On remplit un tableau avec les éléments du csv
-    r1 = open(commande, "r", newline="")
-    a = csv.reader(r1)
-    A = []
-    for row in a:
-        A.append(row)
-    r1.close()
-    return A
+def read_csv(fichier: str):
+    """
+    Permet de remplire un tableau avec les éléments du csv.
+    """
+    file = open(fichier, "r", newline="")
+    file_read = csv.reader(file)
+    file_tab = []
+    for row in file_read:
+        file_tab.append(row)
+    file.close()
+    return file_tab
 
 
-for i in range(Nombre_iterations):
+for i in range(NOMBRE_ITERATIONS):
 
     # Nettoyage des anciens fichiers
 
@@ -76,20 +85,20 @@ for i in range(Nombre_iterations):
     os.system("glpsol -m TricountCalculFlow2.MOD")
     os.system("glpsol -m TricountCalculMin2.MOD")
 
-    A = read_csv("Exchanges.csv")
-    B = read_csv("Exchanges2.csv")
-    if A[-1] != B[-1]:
+    file_1 = read_csv("Exchanges.csv")
+    file_2 = read_csv("Exchanges2.csv")
+    if file_1[-1] != file_2[-1]:
         compteur_nb_trans += 1
 
-    C = read_csv("Results.csv")
-    D = read_csv("Flow.csv")
-    if C[-1][1] != D[-1][1]:
+    results_1 = read_csv("Results.csv")
+    results_2 = read_csv("Flow.csv")
+    if results_1[-1][1] != results_2[-1][1]:
         compteur_nb_flow += 1
 
-if compteur_ecart_trans != 0 or compteur_ecart_flow != 0:
+if COMPTEUR_ECART_TRANS != 0 or COMPTEUR_ECART_FLOW != 0:
     print(
         "Il y a eu {} écarts en nombre de transactions et {} en flow".format(
-            compteur_ecart_trans, compteur_ecart_flow
+            COMPTEUR_ECART_TRANS, COMPTEUR_ECART_FLOW
         )
     )
 else:
