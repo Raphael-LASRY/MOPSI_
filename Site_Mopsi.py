@@ -47,7 +47,7 @@ def completer_dettes():
 
 COMPTEUR_ECART_FLOW = 0
 COMPTEUR_ECART_TRANS = 0
-NOMBRE_ITERATIONS = 5
+NOMBRE_ITERATIONS = 1
 
 
 def read_csv(fichier: str):

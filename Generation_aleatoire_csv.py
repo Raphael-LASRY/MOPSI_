@@ -13,8 +13,8 @@ import numpy as np
 
 ##################################### Paramètres
 
-Nombre_utilisateurs = rd.randint(2, 7)
-Nombre_operations = rd.randint(1, 5)
+Nombre_utilisateurs = rd.randint(2, 5)
+Nombre_operations = rd.randint(1, 3)
 somme_max = 20
 
 ##################################### Génération aléatoire des transactions
