@@ -22,26 +22,10 @@ import pandas as pd
 
 import numpy as np
 
-########### Remplissage du fichier Dettes.csv à partir du fichier Operations.csv
+# Gestion de la résolution en nombre entiers
 
-def completer_dettes():
-    """
-    Permet de passer des opérations effectuées à un fichier de dettes.
-    """
-    operations = pd.read_csv("Operations.csv", header=None, index_col=None, sep=",")
-    names = list(np.transpose(operations)[0])
-    operations = pd.read_csv("Operations.csv", index_col=None, sep=",")
-    del names[0]
-    liste_names = [["NAME", "VALUE"]]
-    for name in names:
-        liste_names.append(
-            [name, sum(operations[name])]
-        )  # On impose ici que les opérations soient telles que la somme des
-        # Dépenses sur toutes les personnes soit nulle
-    liste_names_df = pd.DataFrame(liste_names)
-    if os.path.exists("Dettes.csv"):
-        os.remove("Dettes.csv")
-    liste_names_df.to_csv("Dettes.csv", index=False, header=False, sep=",")
+import test_integer as test_int
+
 
 ########### Génération aléatoire de csv et comparaison des deux approches
 
@@ -75,7 +59,7 @@ for i in range(NOMBRE_ITERATIONS):
         os.remove("Flow.csv")
     if os.path.exists("Exchanges2.csv"):
         os.remove("Exchanges2.csv")
-    completer_dettes()
+    test_int.completer_dettes()
 
     # Génération de csv et résolution du problème
 
