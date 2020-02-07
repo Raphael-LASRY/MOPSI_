@@ -10,7 +10,7 @@
 			<li> {{remb}} </li>
 		{% endfor %}
 	</ul>
-
+	
 	<h3> Listes des dettes cumulées </h3>
 	<ul>
 		{% for nom in dettes : %}
@@ -18,6 +18,19 @@
 		{% endfor %}
 	</ul>
 
+	<h3> Listes des ecarts au montant réel</h3>
+	<ul>
+		{% for e in ecarts : %}
+			<li> {{e}} </li>
+		{% endfor %}
+	</ul>
+	
+	<div>
+	<h3> Ecart total </h3>
+		{{ecart}}
+	</div>
+
+<br>
 <a href="{{ url_for('home') }}"> Retour à la page d'accueil </a>
 </body>
 </html>

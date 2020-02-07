@@ -1,12 +1,12 @@
 NAMEPAY,SUM,NAMEPAYED 
-toi,7,moi
-lui,7,moi
+o,3.33333,m
+p,3.33333,m
 
-toi va effectivement payer 7 a moi
-lui va effectivement payer 7 a moi
+o va effectivement payer 3 a m
+p va effectivement payer 4 a m
 
-L'ecart total pour l'utilisateur moi est de 0
-L'ecart total pour l'utilisateur toi est de 0
-L'ecart total pour l'utilisateur lui est de 0
+L'ecart total pour l'utilisateur m est de 0.33334
+L'ecart total pour l'utilisateur o est de 0.33333
+L'ecart total pour l'utilisateur p est de 0.66667
 
-La somme des ecarts est de 0
+La somme des ecarts est de 1.33334

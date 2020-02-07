@@ -44,6 +44,7 @@ FICHIER_OPERATIONS = "Operations.csv"
 FICHIER_NOMS = "list_names.csv"
 FICHIER_DETTES = "Dettes.csv"
 FICHIER_RESULTATS = "Results.csv"
+FICHIER_RESULTATS_ENTIERS = "Results_integer.csv"
 
 
 def read_csv(fichier: str):
@@ -128,11 +129,10 @@ def afficher_dettes(fichier):
     i = 0
     for row in rows:
         if i > 0: #pour eviter la premiere ligne
-            dico_dettes[row[0]] = row[1]
+            dico_dettes[row[0]] = round(float(row[1]),2)
         i+=1
     return dico_dettes
-    
-        
+
 
 @APP.route('/')
 def home():
@@ -217,7 +217,101 @@ def resultats_classiques():
     for row in rows:
         liste_remboursements.append(row[0])
     
-    return render_template("resultats_classiques.html", remboursements=liste_remboursements)
+    dettes()
+    dico_dettes = afficher_dettes(FICHIER_DETTES)
+    
+    return render_template("resultats_classiques.html", remboursements=liste_remboursements, dettes=dico_dettes)
+
+@APP.route("/results/entiers", methods=["GET"])
+def resultats_entiers():
+    NAMES = dettes()
+    
+    if os.path.exists("Results.csv"):
+        os.remove("Results.csv")
+    if os.path.exists("Exchanges.csv"):
+        os.remove("Exchanges.csv")
+    if os.path.exists("Results_integer.csv"):
+        os.remove("Results_integer.csv")
+
+    FICHIER = open("Results_integer.csv", "a")
+    FICHIER.write("NAMEPAY,SUM,NAMEPAYED \n")
+    FICHIER.close()
+
+    # Calcul exact solutions    
+    os.system("glpsol -m TricountCalculMin1.MOD")
+    os.system("glpsol -m TricountCalculFlowInteger.MOD")
+    
+    # Création des fourchettes hautes et basses
+    DETTES = [
+        [name, 0, 0] for name in NAMES
+    ]  # Le deuxième argument représente la fourchette basse, le premier la fourchette haute
+    
+    FICHIER = open("Results_integer.csv", "r")
+    ROWS = csv.reader(FICHIER)
+    
+    for row in ROWS:
+        for perso in DETTES:
+            if perso[0] == row[0]:
+                perso[1] += int(float(row[1][:]))
+                perso[2] += int(float(row[1][:])) + 1
+            elif perso[0] == row[2]:
+                perso[1] += -int(float(row[1][:])) - 1
+                perso[2] += -int(float(row[1][:]))
+    
+    DETTES_DF = pd.DataFrame(DETTES)
+    
+    if os.path.exists("Dettes_fourchettes.csv"):
+        os.remove("Dettes_fourchettes.csv")
+    DETTES_DF.to_csv("Dettes_fourchettes.csv", index=False, header=False, sep=",")
+    FICHIER.close()
+    
+    
+    ECHANGES = [["NAMEPAY", "NAMEPAYED", "SUMREAL", "SUMLOW", "SUMHIGH"]]
+    FICHIER = open("Results_integer.csv", "r")
+    RESULTS = csv.reader(FICHIER)
+    
+    for row in RESULTS:
+        if row[0] != "NAMEPAY":
+            ECHANGES.append(
+                [
+                    row[0],
+                    row[2],
+                    float(row[1][:]),
+                    int(float(row[1][:])),
+                    int(float(row[1][:])) + 1,
+                ]
+            )
+    
+    ECHANGES_DF = pd.DataFrame(ECHANGES)
+    if os.path.exists("Results_fourchettes.csv"):
+        os.remove("Results_fourchettes.csv")
+    ECHANGES_DF.to_csv("Results_fourchettes.csv", index=False, header=False, sep=",")
+    FICHIER.close()
+    
+    os.system("glpsol -m TricountInteger1.MOD")
+
+    resultats = open(FICHIER_RESULTATS_ENTIERS, "r")
+    rows = csv.reader(resultats)
+    
+    liste_remboursements_effectifs = []
+    liste_ecarts =[]
+    somme_ecart = ""
+    
+    i = 0
+    for row in rows:
+        if row != [] and i > 3 :
+            if row[0][:7] == "L'ecart":
+                liste_ecarts.append(row[0])
+            elif row[0][:8] == "La somme":
+                somme_ecart = row[0]
+            else :
+                liste_remboursements_effectifs.append(row[0])
+        i += 1
+    
+    dettes()
+    dico_dettes = afficher_dettes(FICHIER_DETTES)
+    
+    return render_template("resultats_entiers.html", remboursements=liste_remboursements_effectifs, ecarts=liste_ecarts, ecart=somme_ecart, dettes=dico_dettes)
 
 if __name__ == "__main__":
     APP.debug = False
