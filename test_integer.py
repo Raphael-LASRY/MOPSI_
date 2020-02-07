@@ -28,21 +28,23 @@ def completer_dettes():
     """
     Permet de passer des opérations effectuées à un fichier de dettes.
     """
-    operations = pd.read_csv("Operations.csv", header=None, index_col=None, sep=",")
-    names = list(np.transpose(operations)[0])
-    operations = pd.read_csv("Operations.csv", index_col=None, sep=",")
-    del names[0]
-    liste_names = [["NAME", "VALUE"]]
-    for name in names:
-        liste_names.append(
-            [name, sum(operations[name])]
-        )  # On impose ici que les opérations soient telles que la somme des
-        # Dépenses sur toutes les personnes soit nulle
-    liste_names_df = pd.DataFrame(liste_names)
-    if os.path.exists("Dettes.csv"):
-        os.remove("Dettes.csv")
-    liste_names_df.to_csv("Dettes.csv", index=False, header=False, sep=",")
-    return liste_names
+    if os.path.exists("Operations.csv"):
+        operations = pd.read_csv("Operations.csv", header=None, index_col=None, sep=",")
+        names = list(np.transpose(operations)[0])
+        operations = pd.read_csv("Operations.csv", index_col=None, sep=",")
+        del names[0]
+        liste_names = [["NAME", "VALUE"]]
+        for name in names:
+            liste_names.append(
+                [name, sum(operations[name])]
+            )  # On impose ici que les opérations soient telles que la somme des
+            # Dépenses sur toutes les personnes soit nulle
+        liste_names_df = pd.DataFrame(liste_names)
+        if os.path.exists("Dettes.csv"):
+            os.remove("Dettes.csv")
+        liste_names_df.to_csv("Dettes.csv", index=False, header=False, sep=",")
+        return liste_names
+    return []
 
 NAMES = completer_dettes()
 
