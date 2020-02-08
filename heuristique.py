@@ -24,7 +24,7 @@ test = True
 
 while test:
     test = False
-    remboursement = max(-dettes[0][1],dettes[-1][1])
+    remboursement = min(-dettes[0][1],dettes[-1][1])
     dettes[0][1] += remboursement
     dettes[-1][1] -= remboursement
     Remboursement.append([dettes[0][0], dettes[-1][0], round(remboursement,2)])
