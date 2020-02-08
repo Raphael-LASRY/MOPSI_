@@ -32,4 +32,10 @@ while test:
         if abs(dette[1])>10**(-5):
             test = True
     dettes = sorted(dettes, key=lambda montant: montant[1])
-print(Remboursement)
+
+print("Il y a ", len(Remboursement), " échanges")    
+Argent_echange = 0
+for remboursement in Remboursement:
+    print(remboursement[0], " doit ", remboursement[2], " à ", remboursement[1])
+    Argent_echange += remboursement[2]
+print("La somme totale échangée est de :", Argent_echange)
