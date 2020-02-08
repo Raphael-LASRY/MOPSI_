@@ -63,8 +63,8 @@ FICHIER.close()
 
 # Calcul exact solutions
 
-os.system("glpsol -m TricountCalculMin1.MOD")
-os.system("glpsol -m TricountCalculFlowInteger.MOD")
+# os.system("glpsol -m TricountCalculMin1.MOD")
+# os.system("glpsol -m TricountCalculFlowInteger.MOD")
 
 # Création des fourchettes hautes et basses
 
@@ -122,4 +122,4 @@ if os.path.exists("Results_fourchettes.csv"):
 ECHANGES_DF.to_csv("Results_fourchettes.csv", index=False, header=False, sep=",")
 FICHIER.close()
 
-os.system("glpsol -m TricountInteger1.MOD")
+# os.system("glpsol -m TricountInteger1.MOD")

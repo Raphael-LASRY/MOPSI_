@@ -6,36 +6,42 @@ import numpy as np
 
 from test_integer import completer_dettes as dettes
 
-dettes = dettes()
-del(dettes[0])
+def Heuristique(R):
+    Dettes = dettes()
+    del(Dettes[0])
+    
+    Remboursement = []
+    
+    Dettes = sorted(Dettes, key=lambda montant: montant[1])
+    
+    moy = 0
+    for dette in Dettes:
+        moy += dette[1]
+    moy/=len(Dettes)
+    for dette in Dettes:
+        dette[1] -= moy
+    
+    test = True
+    
+    while test:
+        test = False
+        remboursement = min(-Dettes[0][1],Dettes[-1][1])
+        Dettes[0][1] += remboursement
+        Dettes[-1][1] -= remboursement
+        Remboursement.append([Dettes[0][0], Dettes[-1][0], round(remboursement,2)])
+        for dette in Dettes:
+            if abs(dette[1])>10**(-5):
+                test = True
+        Dettes = sorted(Dettes, key=lambda montant: montant[1])
+    
+    R.append([("Il y a ", len(Remboursement), " échanges")])
+    Argent_echange = 0
+    for remboursement in Remboursement:
+        R.append([(remboursement[0], " doit ", remboursement[2], " à ", remboursement[1])])
+        Argent_echange += remboursement[2]
+    R.append([("La somme totale échangée est de :", Argent_echange)])
 
-Remboursement = []
-
-dettes = sorted(dettes, key=lambda montant: montant[1])
-
-moy = 0
-for dette in dettes:
-    moy += dette[1]
-moy/=len(dettes)
-for dette in dettes:
-    dette[1] -= moy
-
-test = True
-
-while test:
-    test = False
-    remboursement = min(-dettes[0][1],dettes[-1][1])
-    dettes[0][1] += remboursement
-    dettes[-1][1] -= remboursement
-    Remboursement.append([dettes[0][0], dettes[-1][0], round(remboursement,2)])
-    for dette in dettes:
-        if abs(dette[1])>10**(-5):
-            test = True
-    dettes = sorted(dettes, key=lambda montant: montant[1])
-
-print("Il y a ", len(Remboursement), " échanges")    
-Argent_echange = 0
-for remboursement in Remboursement:
-    print(remboursement[0], " doit ", remboursement[2], " à ", remboursement[1])
-    Argent_echange += remboursement[2]
-print("La somme totale échangée est de :", Argent_echange)
+R = []
+Heuristique(R)
+for r in R:
+    print(r)
