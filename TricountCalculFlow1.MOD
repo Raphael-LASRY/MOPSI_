@@ -22,6 +22,7 @@ var Flow{Name_Users, Name_Users} >= 0;  /* Matrice indiquant combien l'individu 
 minimize Nb_exchanges : sum{i in Name_Users, j in Name_Users}(Flow[i, j]); /* Minimisation des montants échangés */
 
 s.t. Nb_Exchanges_fix {t in Nb_Exchanges} : sum{k in Name_Users, l in Name_Users} Exchanges[k, l] = Nb_[t]; /* Il y a un nombre de transactions fixé */
+s.t. Transaction{k in Name_Users, l in Name_Users} : Exchanges[k, l] >= Flow[k, l]/ (1 + Sum_Amount); /* Il y a transaction si le flow entre i et j est posistif */
 s.t. Equilibrium{m in Name_Users} : Debt[m] = sum{n in Name_Users}(Flow[m, n] - Flow[n, m]); /* L'équilibre budgetaire doit etre respecté */
 
 solve;
