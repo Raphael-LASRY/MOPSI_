@@ -46,12 +46,14 @@ for i in range (Nombre_essais):
         j-= 1
         a2 += str(a[j])
     a2 = float("".join(reversed(a2)))
+    resultats.close()
     
     resultats = open("Exchanges.csv", "r")
     rows = csv.reader(resultats)
     for row in rows:
         a = row[1]
     e2 = a[-1]
+    resultats.close()
 
     Temps[1][i] = t4-t3
     Argent_echange[1][i] = a2
@@ -71,15 +73,27 @@ for i in range (Nombre_essais):
     for row in rows:
         a = row[1]
     a3 = float(str(a))
+    resultats.close()
     
     resultats = open("Exchanges2.csv", "r")
     rows = csv.reader(resultats)
     for row in rows:
         a = row[1]
     e3 = a[-1]
+    resultats.close()
+    
     Temps[2][i] = t6-t5
     Argent_echange[2][i] = a3
     Nombre_echange[2][i] = int(e3)
+    
+    if Nombre_echange[0][i] != Nombre_echange[1][i] or round(Argent_echange[0][i],2) != round(Argent_echange[1][i],2) or round(Argent_echange[0][i],2) != round(Argent_echange[2][i],2) or Nombre_echange[1][i] != Nombre_echange[2][i] or round(Argent_echange[1][i],2) != round(Argent_echange[2][i],2) or Nombre_echange[1][i] != Nombre_echange[2][i]:
+        os.rename("Exchanges.csv", "Erreur_Exchanges.csv")
+        os.rename("Exchanges2.csv", "Erreur_Exchanges2.csv")
+        os.rename("Flow.csv", "Erreur_Flow.csv")
+        os.rename("Results.csv", "Erreur_Results.csv")
+        os.rename("Dettes.csv", "Erreur_Dettes.csv")
+        os.rename("Operations.csv", "Erreur_Operations.csv")
+        print ("Nombre échange :", a1, "Argent :", e1)
     
 X = [i for i in range(Nombre_essais)]
 
