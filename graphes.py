@@ -6,7 +6,7 @@ import os
 import numpy as np
 import csv
 
-Nombre_essais = 33
+Nombre_essais = 5
 Temps = np.zeros((3,Nombre_essais))
 Argent_echange = np.zeros((3,Nombre_essais))
 Nombre_echange = np.zeros((3,Nombre_essais))
@@ -52,7 +52,15 @@ for i in range (Nombre_essais):
     rows = csv.reader(resultats)
     for row in rows:
         a = row[1]
-    e2 = a[-1]
+    j = -1
+    e2 = str(a[j])
+    while str(a[j]) != " ":
+        j-= 1
+        if len(a) >= -j:
+          e2 += str(a[j])
+        else:
+           break
+    e2 = float("".join(reversed(e2)))
     resultats.close()
 
     Temps[1][i] = t4-t3
@@ -79,14 +87,22 @@ for i in range (Nombre_essais):
     rows = csv.reader(resultats)
     for row in rows:
         a = row[1]
-    e3 = a[-1]
+    j = -1
+    e3 = str(a[j])
+    while str(a[j]) != " ":
+        j-= 1
+        if len(a) >= -j:
+            e3 += str(a[j])
+        else:
+            break
+    e3 = float("".join(reversed(e3)))
     resultats.close()
     
     Temps[2][i] = t6-t5
     Argent_echange[2][i] = a3
     Nombre_echange[2][i] = int(e3)
     
-    if Nombre_echange[0][i] != Nombre_echange[1][i] or round(Argent_echange[0][i],2) != round(Argent_echange[1][i],2) or round(Argent_echange[0][i],2) != round(Argent_echange[2][i],2) or Nombre_echange[1][i] != Nombre_echange[2][i] or round(Argent_echange[1][i],2) != round(Argent_echange[2][i],2) or Nombre_echange[1][i] != Nombre_echange[2][i]:
+    if Nombre_echange[0][i] != Nombre_echange[1][i] or round(Argent_echange[0][i],2) != round(Argent_echange[1][i],2) or round(Argent_echange[0][i],2) != round(Argent_echange[2][i],2) or Nombre_echange[1][i] != Nombre_echange[2][i] or round(Argent_echange[1][i],2) != round(Argent_echange[2][i],2) or Nombre_echange[0][i] != Nombre_echange[2][i]:
         os.rename("Exchanges.csv", "Erreur_Exchanges.csv")
         os.rename("Exchanges2.csv", "Erreur_Exchanges2.csv")
         os.rename("Flow.csv", "Erreur_Flow.csv")
