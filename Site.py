@@ -198,8 +198,6 @@ def add_op():
     dictionnaire_op_ajoutee["payes"] = new_op.getlist("payes")
     dictionnaire_op_ajoutee["montant"] = new_op["montant"]
     
-    print(dictionnaire_op_ajoutee)
-    
     ecrire_operations(dictionnaire_op_ajoutee, FICHIER_OPERATIONS)
     
     dettes()
@@ -259,8 +257,10 @@ def resultats_classiques():
 def resultats_flowmin():
     if os.path.exists("Results.csv"):
         os.remove("Results.csv")
-    if os.path.exists("Exchanges.csv"):
-        os.remove("Exchanges.csv")
+    if os.path.exists("Exchanges2.csv"):
+        os.remove("Exchanges2.csv")
+    if os.path.exists("Flow.csv"):
+        os.remove("Flow.csv")
 
     # Calcul exact solutions
     t1= time.time()
@@ -299,32 +299,7 @@ def resultats_entiers():
     t1 = time.time()
     os.system("glpsol -m TricountCalculMin1.MOD")
     os.system("glpsol -m TricountCalculFlowInteger.MOD")
-    
-    # Création des fourchettes hautes et basses
-    DETTES = [
-        [name, 0, 0] for name in NAMES
-    ]  # Le deuxième argument représente la fourchette basse, le premier la fourchette haute
-    
-    FICHIER = open("Results_integer.csv", "r")
-    ROWS = csv.reader(FICHIER)
-    
-    for row in ROWS:
-        for perso in DETTES:
-            if perso[0] == row[0]:
-                perso[1] += int(float(row[1][:]))
-                perso[2] += int(float(row[1][:])) + 1
-            elif perso[0] == row[2]:
-                perso[1] += -int(float(row[1][:])) - 1
-                perso[2] += -int(float(row[1][:]))
-    
-    DETTES_DF = pd.DataFrame(DETTES)
-    
-    if os.path.exists("Dettes_fourchettes.csv"):
-        os.remove("Dettes_fourchettes.csv")
-    DETTES_DF.to_csv("Dettes_fourchettes.csv", index=False, header=False, sep=",")
-    FICHIER.close()
-    
-    
+
     ECHANGES = [["NAMEPAY", "NAMEPAYED", "SUMREAL", "SUMLOW", "SUMHIGH"]]
     FICHIER = open("Results_integer.csv", "r")
     RESULTS = csv.reader(FICHIER)
@@ -340,7 +315,7 @@ def resultats_entiers():
                     int(float(row[1][:])) + 1,
                 ]
             )
-    
+
     ECHANGES_DF = pd.DataFrame(ECHANGES)
     if os.path.exists("Results_fourchettes.csv"):
         os.remove("Results_fourchettes.csv")
@@ -351,6 +326,7 @@ def resultats_entiers():
     t2 = time.time()
     t = round(t2 - t1,3)
 
+    #Traitement des resultats
     resultats = open(FICHIER_RESULTATS_ENTIERS, "r")
     rows = csv.reader(resultats)
     

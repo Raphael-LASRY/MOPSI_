@@ -57,6 +57,7 @@ def generer():
             FICHIER.write(str(round(MATRICE_OPERATIONS[i, j], 2)))
             FICHIER.write(",")
         FICHIER.write(str(round(DELTA[i], 2)))
-        FICHIER.write("\n")
+        if i < NOMBRE_OPERATIONS - 1:
+            FICHIER.write("\n")
 
-generer()
+#generer()

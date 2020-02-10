@@ -18,7 +18,7 @@ var Ecart {Name_User}; /* Ecart pour chaque personne */
 
 /* Corps du problème d'optimisation */
 
-minimize Nombre_ecart {i in Name_User} : Ecart[i]; /* Minimisation du nombre de transactions */
+minimize Nombre_ecart : sum{i in Name_User} Ecart[i]; /* Minimisation des earts */
 
 s.t. High{(k, l) in Index_Operation} : Flow[k, l] >= Sum_Low[k, l]; /* La transaction est supérieure à la fouchette basse */
 s.t. Low{(m, n) in Index_Operation} : Flow[m, n] <= Sum_High[m, n]; /* La transaction est inférieure à la fouchette haute */
@@ -32,7 +32,7 @@ solve;
 printf "\n" >> "Results_integer.csv";
 printf {(b, g) in Index_Operation} "%s va effectivement payer %g a %s\n", b, Flow[b, g], g >> "Results_integer.csv"; /* On affiche ce que les gens ont effectivement payé */
 printf "\n" >> "Results_integer.csv";
-printf {h in Name_User} "L'ecart total pour l'utilisateur %s est de %g\n", h, Nombre_ecart[h] >> "Results_integer.csv";
+printf {h in Name_User} "L'ecart total pour l'utilisateur %s est de %g\n", h, Ecart[h] >> "Results_integer.csv";
 printf "\n" >> "Results_integer.csv";
-printf "La somme des ecarts est de %g", sum{r in Name_User} Nombre_ecart[r] >> "Results_integer.csv";
+printf "La somme des ecarts est de %g", Nombre_ecart >> "Results_integer.csv";
 end;

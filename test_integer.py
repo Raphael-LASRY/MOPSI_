@@ -46,80 +46,81 @@ def completer_dettes():
         return liste_names
     return []
 
-NAMES = completer_dettes()
+
 
 ########### Création des fichiers CSV
-
-if os.path.exists("Results.csv"):
-    os.remove("Results.csv")
-if os.path.exists("Exchanges.csv"):
-    os.remove("Exchanges.csv")
-if os.path.exists("Results_integer.csv"):
-    os.remove("Results_integer.csv")
-
-FICHIER = open("Results_integer.csv", "a")
-FICHIER.write("NAMEPAY,SUM,NAMEPAYED \n")
-FICHIER.close()
-
-# Calcul exact solutions
-
-# os.system("glpsol -m TricountCalculMin1.MOD")
-# os.system("glpsol -m TricountCalculFlowInteger.MOD")
-
-# Création des fourchettes hautes et basses
-
-DETTES = [
-    [name, 0, 0] for name in NAMES
-]  # Le deuxième argument représente la fourchette basse, le premier la fourchette haute
-
-FICHIER = open("Results_integer.csv", "r")
-ROWS = csv.reader(FICHIER)
-
-for row in ROWS:
-    for perso in DETTES:
-        if perso[0] == row[0]:
-            perso[1] += int(float(row[1][:]))
-            perso[2] += int(float(row[1][:])) + 1
-        elif perso[0] == row[2]:
-            perso[1] += -int(float(row[1][:])) - 1
-            perso[2] += -int(float(row[1][:]))
-
-# print("###########################################")
-# print(DETTES)
-# print("###########################################")
-
-DETTES_DF = pd.DataFrame(DETTES)
-
-if os.path.exists("Dettes_fourchettes.csv"):
-    os.remove("Dettes_fourchettes.csv")
-DETTES_DF.to_csv("Dettes_fourchettes.csv", index=False, header=False, sep=",")
-FICHIER.close()
-
-
-ECHANGES = [["NAMEPAY", "NAMEPAYED", "SUMREAL", "SUMLOW", "SUMHIGH"]]
-FICHIER = open("Results_integer.csv", "r")
-RESULTS = csv.reader(FICHIER)
-
-for row in RESULTS:
-    if row[0] != "NAMEPAY":
-        ECHANGES.append(
-            [
-                row[0],
-                row[2],
-                float(row[1][:]),
-                int(float(row[1][:])),
-                int(float(row[1][:])) + 1,
-            ]
-        )
-
-# print("###########################################")
-# print(Echanges)
-# print("###########################################")
-
-ECHANGES_DF = pd.DataFrame(ECHANGES)
-if os.path.exists("Results_fourchettes.csv"):
-    os.remove("Results_fourchettes.csv")
-ECHANGES_DF.to_csv("Results_fourchettes.csv", index=False, header=False, sep=",")
-FICHIER.close()
-
-# os.system("glpsol -m TricountInteger1.MOD")
+def integer():
+    NAMES = completer_dettes()
+    if os.path.exists("Results.csv"):
+        os.remove("Results.csv")
+    if os.path.exists("Exchanges.csv"):
+        os.remove("Exchanges.csv")
+    if os.path.exists("Results_integer.csv"):
+        os.remove("Results_integer.csv")
+    
+    FICHIER = open("Results_integer.csv", "a")
+    FICHIER.write("NAMEPAY,SUM,NAMEPAYED \n")
+    FICHIER.close()
+    
+    # Calcul exact solutions
+    
+    # os.system("glpsol -m TricountCalculMin1.MOD")
+    # os.system("glpsol -m TricountCalculFlowInteger.MOD")
+    
+    # Création des fourchettes hautes et basses
+    
+    DETTES = [
+        [name, 0, 0] for name in NAMES
+    ]  # Le deuxième argument représente la fourchette basse, le premier la fourchette haute
+    
+    FICHIER = open("Results_integer.csv", "r")
+    ROWS = csv.reader(FICHIER)
+    
+    for row in ROWS:
+        for perso in DETTES:
+            if perso[0] == row[0]:
+                perso[1] += int(float(row[1][:])) #fourchette si il le nique à tous les arrondis (payeur)
+                perso[2] += int(float(row[1][:])) + 1 #fourchette si il se fait niquer à tous les arrondis (payeur)
+            elif perso[0] == row[2]:
+                perso[1] += -int(float(row[1][:])) - 1
+                perso[2] += -int(float(row[1][:]))
+    
+    # print("###########################################")
+    # print(DETTES)
+    # print("###########################################")
+    
+    DETTES_DF = pd.DataFrame(DETTES)
+    
+    if os.path.exists("Dettes_fourchettes.csv"):
+        os.remove("Dettes_fourchettes.csv")
+    DETTES_DF.to_csv("Dettes_fourchettes.csv", index=False, header=False, sep=",")
+    FICHIER.close()
+    
+    
+    ECHANGES = [["NAMEPAY", "NAMEPAYED", "SUMREAL", "SUMLOW", "SUMHIGH"]]
+    FICHIER = open("Results_integer.csv", "r")
+    RESULTS = csv.reader(FICHIER)
+    
+    for row in RESULTS:
+        if row[0] != "NAMEPAY":
+            ECHANGES.append(
+                [
+                    row[0],
+                    row[2],
+                    float(row[1][:]),
+                    int(float(row[1][:])),
+                    int(float(row[1][:])) + 1,
+                ]
+            )
+    
+    # print("###########################################")
+    # print(Echanges)
+    # print("###########################################")
+    
+    ECHANGES_DF = pd.DataFrame(ECHANGES)
+    if os.path.exists("Results_fourchettes.csv"):
+        os.remove("Results_fourchettes.csv")
+    ECHANGES_DF.to_csv("Results_fourchettes.csv", index=False, header=False, sep=",")
+    FICHIER.close()
+    
+    # os.system("glpsol -m TricountInteger1.MOD")
