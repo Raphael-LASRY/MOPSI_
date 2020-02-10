@@ -14,6 +14,8 @@ Fichier conforme à la norme PEP8
 
 import os
 from werkzeug.datastructures import ImmutableMultiDict
+import random as rd
+import numpy as np
 
 # Gestion des données avec un csv
 
@@ -28,6 +30,9 @@ import numpy as np
 
 #import test_integer as test_int
 from test_integer import completer_dettes as dettes
+
+#import generation aleatoire
+from Generation_aleatoire_csv import generer as gene
 
 from flask import Flask, request, jsonify, send_from_directory, render_template
 from flask_cors import CORS
@@ -194,6 +199,19 @@ def add_op():
     print(dictionnaire_op_ajoutee)
     
     ecrire_operations(dictionnaire_op_ajoutee, FICHIER_OPERATIONS)
+    
+    dettes()
+    dico_dettes = afficher_dettes(FICHIER_DETTES)
+    
+    return render_template("bienvenue.html", noms=names, dettes=dico_dettes)
+
+@APP.route("/aleat", methods=["POST"])
+def exemple_aleatoire():
+    gene()
+    
+    names = pd.read_csv(FICHIER_OPERATIONS, header=None, index_col=None, sep=",")
+    names = list(np.transpose(names)[0])
+    del(names[0])
     
     dettes()
     dico_dettes = afficher_dettes(FICHIER_DETTES)
