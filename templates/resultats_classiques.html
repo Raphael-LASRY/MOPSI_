@@ -17,7 +17,15 @@
 			<li> {{nom}} : {{dettes[nom]}} </li>
 		{% endfor %}
 	</ul>
+	
+	<h3> Temps de calcul </h3>
+	Le calcul de la solution a été effectué en {{time}} secondes.
 
-<a href="{{ url_for('home') }}"> Retour à la page d'accueil </a>
+<br>
+<br>
+<ul>
+<li> <a href="javascript:history.go(-1)"> Retour </a> </li>
+<li> <a href="{{ url_for('home') }}"> Faire un nouveau partage </a> </li>
+</ul>
 </body>
 </html>

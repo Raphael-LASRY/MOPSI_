@@ -16,6 +16,7 @@ import os
 from werkzeug.datastructures import ImmutableMultiDict
 import random as rd
 import numpy as np
+import time
 
 # Gestion des données avec un csv
 
@@ -181,6 +182,7 @@ def add_op():
     
     names = pd.read_csv(FICHIER_NOMS, header=None, index_col=None, sep=",")
     names = list(np.transpose(names)[0])
+    print(names)
     
     if os.path.exists(FICHIER_OPERATIONS):
         pass
@@ -211,10 +213,20 @@ def exemple_aleatoire():
     
     names = pd.read_csv(FICHIER_OPERATIONS, header=None, index_col=None, sep=",")
     names = list(np.transpose(names)[0])
-    del(names[0])
+    del names[0]
     
     dettes()
     dico_dettes = afficher_dettes(FICHIER_DETTES)
+    
+    fichier = open(FICHIER_NOMS, "a")
+    i = 0
+    for name in names:
+        if i > 0:
+            fichier.write("," + name)
+        else :
+            fichier.write(name)
+        i += 1
+    fichier.close()
     
     return render_template("bienvenue.html", noms=names, dettes=dico_dettes)
 
@@ -226,8 +238,11 @@ def resultats_classiques():
         os.remove("Exchanges.csv")
 
     # Calcul exact solutions
+    t1 = time.time()
     os.system("glpsol -m TricountCalculMin1.MOD")
     os.system("glpsol -m TricountCalculFlow1.MOD")
+    t2 = time.time()
+    t = round(t2 - t1,3)
     
     resultats = open(FICHIER_RESULTATS, "r")
     rows = csv.reader(resultats)
@@ -238,7 +253,32 @@ def resultats_classiques():
     dettes()
     dico_dettes = afficher_dettes(FICHIER_DETTES)
     
-    return render_template("resultats_classiques.html", remboursements=liste_remboursements, dettes=dico_dettes)
+    return render_template("resultats_classiques.html", remboursements=liste_remboursements, dettes=dico_dettes, time=t)
+
+@APP.route("/results/flowmin", methods=["GET"])
+def resultats_flowmin():
+    if os.path.exists("Results.csv"):
+        os.remove("Results.csv")
+    if os.path.exists("Exchanges.csv"):
+        os.remove("Exchanges.csv")
+
+    # Calcul exact solutions
+    t1= time.time()
+    os.system("glpsol -m TricountCalculFlow2.MOD")
+    os.system("glpsol -m TricountCalculMin2.MOD")
+    t2 = time.time()
+    t = round(t2 - t1,3)
+    
+    resultats = open(FICHIER_RESULTATS, "r")
+    rows = csv.reader(resultats)
+    liste_remboursements = []
+    for row in rows:
+        liste_remboursements.append(row[0])
+    
+    dettes()
+    dico_dettes = afficher_dettes(FICHIER_DETTES)
+    
+    return render_template("resultats_classiques.html", remboursements=liste_remboursements, dettes=dico_dettes, time=t)
 
 @APP.route("/results/entiers", methods=["GET"])
 def resultats_entiers():
@@ -256,6 +296,7 @@ def resultats_entiers():
     FICHIER.close()
 
     # Calcul exact solutions    
+    t1 = time.time()
     os.system("glpsol -m TricountCalculMin1.MOD")
     os.system("glpsol -m TricountCalculFlowInteger.MOD")
     
@@ -307,6 +348,8 @@ def resultats_entiers():
     FICHIER.close()
     
     os.system("glpsol -m TricountInteger1.MOD")
+    t2 = time.time()
+    t = round(t2 - t1,3)
 
     resultats = open(FICHIER_RESULTATS_ENTIERS, "r")
     rows = csv.reader(resultats)
@@ -329,7 +372,7 @@ def resultats_entiers():
     dettes()
     dico_dettes = afficher_dettes(FICHIER_DETTES)
     
-    return render_template("resultats_entiers.html", remboursements=liste_remboursements_effectifs, ecarts=liste_ecarts, ecart=somme_ecart, dettes=dico_dettes)
+    return render_template("resultats_entiers.html", remboursements=liste_remboursements_effectifs, ecarts=liste_ecarts, ecart=somme_ecart, dettes=dico_dettes, time=t)
 
 if __name__ == "__main__":
     APP.debug = False

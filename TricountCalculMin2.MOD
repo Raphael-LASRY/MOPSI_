@@ -32,4 +32,7 @@ solve;
 printf "EXCHANGES,NUMBER\n" >> "Exchanges2.csv";
 printf "Number,%d\n",Nb_exchanges >> "Exchanges2.csv";
 
+printf {i in Name_Users, j in Name_Users: Flow[i, j]!=0} "%s doit %.2f à %s \n", j, Flow[i, j], i >> "Results.csv"; /* On affiche uniquement les transactions non nulles entre personnes */
+printf "La somme totale des échanges est de %.2f", sum{o in Name_Users, b in Name_Users} Flow[o, b] >> "Results.csv";
+
 end;
