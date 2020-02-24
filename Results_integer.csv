@@ -1,15 +1,13 @@
 NAMEPAY,SUM,NAMEPAYED 
-p,2.49,a
-z,2.49,a
-m,2.4,a
+Name2,11.38,Name1
+Name2,6.29,Name3
 
-p va effectivement payer 3 a a
-z va effectivement payer 2 a a
-m va effectivement payer 2 a a
+Name2 va effectivement payer 12 a Name1
+Name2 va effectivement payer 6 a Name3
 
-L'ecart total pour l'utilisateur a est de 0.38
-L'ecart total pour l'utilisateur p est de 0.51
-L'ecart total pour l'utilisateur z est de 0.49
-L'ecart total pour l'utilisateur m est de 0.4
+L'ecart total pour l'utilisateur Name1 est de 0.62
+L'ecart total pour l'utilisateur Name2 est de 0.33
+L'ecart total pour l'utilisateur Name3 est de 0.29
+L'ecart total pour l'utilisateur Name4 est de 0
 
-La somme des ecarts est de 1.78
+La somme des ecarts est de 1.24

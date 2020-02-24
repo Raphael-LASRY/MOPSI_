@@ -35,6 +35,9 @@ from test_integer import completer_dettes as dettes
 #import generation aleatoire
 from Generation_aleatoire_csv import generer as gene
 
+#import heuristique
+from heuristique import calcul_heuristique as heuristique
+
 from flask import Flask, request, jsonify, send_from_directory, render_template
 from flask_cors import CORS
 
@@ -182,7 +185,6 @@ def add_op():
     
     names = pd.read_csv(FICHIER_NOMS, header=None, index_col=None, sep=",")
     names = list(np.transpose(names)[0])
-    print(names)
     
     if os.path.exists(FICHIER_OPERATIONS):
         pass
@@ -213,9 +215,6 @@ def exemple_aleatoire():
     names = list(np.transpose(names)[0])
     del names[0]
     
-    dettes()
-    dico_dettes = afficher_dettes(FICHIER_DETTES)
-    
     fichier = open(FICHIER_NOMS, "a")
     i = 0
     for name in names:
@@ -225,6 +224,9 @@ def exemple_aleatoire():
             fichier.write(name)
         i += 1
     fichier.close()
+    
+    dettes()
+    dico_dettes = afficher_dettes(FICHIER_DETTES)
     
     return render_template("bienvenue.html", noms=names, dettes=dico_dettes)
 
@@ -349,6 +351,21 @@ def resultats_entiers():
     dico_dettes = afficher_dettes(FICHIER_DETTES)
     
     return render_template("resultats_entiers.html", remboursements=liste_remboursements_effectifs, ecarts=liste_ecarts, ecart=somme_ecart, dettes=dico_dettes, time=t)
+
+@APP.route("/results/heuristique", methods=["GET"])
+def resultats_heuristique():
+    solution = []
+    # Calcul solutions avec heuristique
+    t1= time.time()
+    heuristique(solution)
+    t2 = time.time()
+    t = round(t2 - t1,3)
+    
+    dettes()
+    dico_dettes = afficher_dettes(FICHIER_DETTES)
+    
+    return render_template("resultats_classiques.html", remboursements=solution, dettes=dico_dettes, time=t)
+
 
 if __name__ == "__main__":
     APP.debug = False

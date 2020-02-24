@@ -23,16 +23,18 @@ import pandas as pd
 import numpy as np
 
 ########### Remplissage du fichier_dettes.csv à partir du fichier Operations.csv
-
+FICHIER_NOMS = "list_names.csv"
 def completer_dettes():
     """
     Permet de passer des opérations effectuées à un fichier de dettes.
     """
     if os.path.exists("Operations.csv"):
-        operations = pd.read_csv("Operations.csv", header=None, index_col=None, sep=",")
-        names = list(np.transpose(operations)[0])
+       # operations = pd.read_csv("Operations.csv", header=None, index_col=None, sep=",")
+        #names = list(np.transpose(operations)[0])
+        names = pd.read_csv(FICHIER_NOMS, header=None, index_col=None, sep=",")
+        names = list(np.transpose(names)[0])
         operations = pd.read_csv("Operations.csv", index_col=None, sep=",")
-        del names[0]
+        #del names[0]
         liste_names = [["NAME", "VALUE"]]
         for name in names:
             liste_names.append(

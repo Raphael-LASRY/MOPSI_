@@ -6,7 +6,7 @@ import numpy as np
 
 from test_integer import completer_dettes as dettes
 
-def Heuristique(R):
+def calcul_heuristique(R):
     Dettes = dettes()
     del(Dettes[0])
     
@@ -34,14 +34,9 @@ def Heuristique(R):
                 test = True
         Dettes = sorted(Dettes, key=lambda montant: montant[1])
     
-    R.append([("Il y a ", len(Remboursement), " échanges")])
+    #R.append([("Il y a ", len(Remboursement), " échanges")])
     Argent_echange = 0
     for remboursement in Remboursement:
-        R.append([(remboursement[0], " doit ", remboursement[2], " à ", remboursement[1])])
+        R.append((remboursement[0] + " doit " + str(remboursement[2]) + " à " + remboursement[1]))
         Argent_echange += remboursement[2]
-    R.append([("La somme totale échangée est de :", Argent_echange)])
-
-R = []
-Heuristique(R)
-for r in R:
-    print(r)
+    R.append(("La somme totale échangée est de " + str(Argent_echange)))
